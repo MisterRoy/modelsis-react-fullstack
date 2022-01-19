@@ -9,10 +9,12 @@ import {
   MenuItem,
   Button,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const _productTypes = ["Smartphone", "Laptop", "Bluetooth Speaker"];
 
 const AddProductPage = () => {
+  let navigate = useNavigate();
   const [productTypes, setProductTypes] = useState(_productTypes);
 
   return (
@@ -53,7 +55,13 @@ const AddProductPage = () => {
               >
                 <Typography>* Required</Typography>
                 <Stack direction="row" spacing={2} alignSelf={"flex-end"}>
-                  <Button variant="contained" color="error">
+                  <Button
+                    variant="contained"
+                    color="error"
+                    onClick={() => {
+                      navigate("/");
+                    }}
+                  >
                     Cancel
                   </Button>
                   <Button variant="contained">Save</Button>
