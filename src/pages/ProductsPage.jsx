@@ -7,39 +7,15 @@ import {
   Button,
   Stack,
   IconButton,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  CircularProgress,
-  Alert,
-  Snackbar,
 } from '@mui/material/';
 import { DataGrid } from '@mui/x-data-grid';
 import { Delete, Edit } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import {
-  deleteProduct,
-  getProduct,
-  getProducts,
-} from '../services/productsService';
+import { deleteProduct, getProducts } from '../services/productsService';
 import ActivityIndicator from '../components/ActivityIndicator';
 import BottomAlert from '../components/BottomAlert';
 import { formatDate } from '../services/date';
 import ConfirmPopUp from '../components/ConfirmPopUp';
-
-const rows = [
-  { id: 1, name: 'iPhone X', creationDate: '19/01/2022', type: 'Smartphone' },
-  { id: 2, name: 'iPhone SE', creationDate: '19/01/2022', type: 'Smartphone' },
-  {
-    id: 3,
-    name: 'Lenovo Legion Slim 7',
-    creationDate: '19/01/2022',
-    type: 'Laptop',
-  },
-];
 
 const ProductsPage = () => {
   const navigate = useNavigate();
@@ -53,13 +29,16 @@ const ProductsPage = () => {
   const [alertMessage, setAlertMessage] = useState('');
   const [alertSeverity, setAlertSeverity] = useState('success');
 
-  useEffect(async () => {
-    try {
+  useEffect(() => {
+    async function fetchProducts() {
       let _products = await getProducts();
       _products = _products.map((p) => {
         return { ...p, creationDate: formatDate(p.creationDate) };
       });
       setProducts(_products);
+    }
+    try {
+      fetchProducts();
     } catch (error) {
       setAlertMessage('Network Error');
       setAlertSeverity('error');

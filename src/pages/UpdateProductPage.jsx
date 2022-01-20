@@ -17,8 +17,6 @@ import {
 } from '../services/productsService';
 import BottomAlert from '../components/BottomAlert';
 
-const _productTypes = ['Smartphone', 'Laptop', 'Bluetooth Speaker'];
-
 const UpdateProductPage = () => {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -35,18 +33,21 @@ const UpdateProductPage = () => {
 
   const [updateSuccess, setUpdateSuccess] = useState(false);
 
-  useEffect(async () => {
-    try {
+  useEffect(() => {
+    async function fetchProducts() {
       const _product = await getProduct(id);
       setProductTypes(await getProductTypes());
       setProduct(_product);
       setProductName(_product.name);
       setProductType(_product.type);
+    }
+    try {
+      fetchProducts();
     } catch (error) {
       console.log(error.message);
       navigate('/');
     }
-  }, []);
+  }, [id, navigate]);
 
   async function handleUpdate() {
     let isFormCorrect = true;
@@ -64,7 +65,7 @@ const UpdateProductPage = () => {
     if (!isFormCorrect) return;
 
     try {
-      const response = await updateProduct({
+      await updateProduct({
         _id: product._id,
         name: productName,
         type: productType,
@@ -133,7 +134,6 @@ const UpdateProductPage = () => {
                 label='Product Type*'
                 variant='outlined'
                 select
-                helperText='Please select a product type'
                 value={productType}
                 onChange={handleOnTypeSelect}
                 error={typeError}

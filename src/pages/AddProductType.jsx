@@ -6,17 +6,11 @@ import {
   Box,
   TextField,
   Stack,
-  MenuItem,
   Button,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import {
-  createProductType,
-  getProductTypes,
-} from '../services/productsService';
+import { createProductType } from '../services/productsService';
 import BottomAlert from '../components/BottomAlert';
-
-const productTypes = ['Smartphone', 'Laptop', 'Bluetooth Speaker'];
 
 const AddProductTypePage = () => {
   const navigate = useNavigate();

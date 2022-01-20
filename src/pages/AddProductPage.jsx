@@ -30,9 +30,12 @@ const AddProductPage = () => {
   const [alertMessage, setAlertMessage] = useState('');
   const [alertSeverity, setAlertSeverity] = useState('success');
 
-  useEffect(async () => {
-    try {
+  useEffect(() => {
+    async function fetchProductTypes() {
       setProductTypes(await getProductTypes());
+    }
+    try {
+      fetchProductTypes();
       setFieldsDisabled(false);
     } catch (error) {
       console.log(error.message);

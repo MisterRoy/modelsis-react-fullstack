@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Box, CircularProgress, Grid } from '@mui/material';
+import React from 'react';
+import { Box, CircularProgress } from '@mui/material';
 
 export default function ActivityIndicator() {
   return (
