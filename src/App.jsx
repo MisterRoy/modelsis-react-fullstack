@@ -1,18 +1,19 @@
-import React from "react";
-import AppBar from "./components/AppBar";
-import { Container, Box, Typography } from "@mui/material/";
+import React from 'react';
+import ProductsPage from './pages/ProductsPage';
+import AddProductPage from './pages/AddProductPage';
+import AddProductTypePage from './pages/AddProductType';
+import { Route, Routes } from 'react-router-dom';
+import UpdateProductPage from './pages/UpdateProductPage';
 
 const App = () => {
   return (
     <div>
-      <AppBar />
-      <Container maxWidth="md">
-        <Typography variant="h2" align="center">
-          Hello
-        </Typography>
-
-        <Box sx={{ bgcolor: "#cfe8fc", height: "100vh" }} />
-      </Container>
+      <Routes>
+        <Route path='/' element={<ProductsPage />} />
+        <Route path='/product' element={<AddProductPage />} />
+        <Route path='/product/:id' element={<UpdateProductPage />} />
+        <Route path='/product-type' element={<AddProductTypePage />} />
+      </Routes>
     </div>
   );
 };

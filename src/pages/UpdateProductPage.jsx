@@ -9,16 +9,23 @@ import {
   MenuItem,
   Button,
 } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-import { createProduct, getProductTypes } from '../services/productsService';
+import { useNavigate, useParams } from 'react-router-dom';
+import {
+  getProduct,
+  getProductTypes,
+  updateProduct,
+} from '../services/productsService';
 import BottomAlert from '../components/BottomAlert';
 
-const AddProductPage = () => {
+const _productTypes = ['Smartphone', 'Laptop', 'Bluetooth Speaker'];
+
+const UpdateProductPage = () => {
   const navigate = useNavigate();
-  const [fieldsDisabled, setFieldsDisabled] = useState(true);
-  const [productTypes, setProductTypes] = useState(['']);
+  const { id } = useParams();
+  const [productTypes, setProductTypes] = useState(['', '']);
   const [productName, setProductName] = useState('');
   const [productType, setProductType] = useState('');
+  const [product, setProduct] = useState();
 
   const [nameError, setNameError] = useState(false);
   const [typeError, setTypeError] = useState(false);
@@ -26,32 +33,22 @@ const AddProductPage = () => {
   const [nameHelperMessage, setNameHelperMessage] = useState('');
   const [typeHelperMessage, setTypeHelperMessage] = useState('');
 
-  const [addSuccess, setAddSuccess] = useState(false);
-  const [alertMessage, setAlertMessage] = useState('');
-  const [alertSeverity, setAlertSeverity] = useState('success');
+  const [updateSuccess, setUpdateSuccess] = useState(false);
 
   useEffect(async () => {
     try {
+      const _product = await getProduct(id);
       setProductTypes(await getProductTypes());
-      setFieldsDisabled(false);
+      setProduct(_product);
+      setProductName(_product.name);
+      setProductType(_product.type);
     } catch (error) {
       console.log(error.message);
-
-      setAlertMessage('Network Error');
-      setAlertSeverity('error');
-      setAddSuccess(true);
+      navigate('/');
     }
   }, []);
 
-  function handleOnNameChange(event) {
-    setProductName(event.target.value);
-  }
-
-  function handleOnTypeChange(event) {
-    setProductType(event.target.value);
-  }
-
-  async function handleOnSave() {
+  async function handleUpdate() {
     let isFormCorrect = true;
     if (productName === '') {
       isFormCorrect = false;
@@ -67,27 +64,30 @@ const AddProductPage = () => {
     if (!isFormCorrect) return;
 
     try {
-      await createProduct({
+      const response = await updateProduct({
+        _id: product._id,
         name: productName,
         type: productType,
       });
-
-      setAlertMessage('Product successfully added !');
-      setAlertSeverity('success');
-      setAddSuccess(true);
-
-      setProductName('');
-      setProductType('');
+      setUpdateSuccess(true);
     } catch (error) {
       const response = error.response;
-      if (response.data.includes('type')) {
-        setTypeError(true);
-        setTypeHelperMessage(response.data);
-      } else if (response.data.includes('exists')) {
+      if (response.data.includes('name') || response.data.includes('already')) {
         setNameError(true);
         setNameHelperMessage(response.data);
+      } else if (response.data.includes('type')) {
+        setTypeError(true);
+        setTypeHelperMessage(response.data);
       }
     }
+  }
+
+  function handleOnNameType(event) {
+    setProductName(event.target.value);
+  }
+
+  function handleOnTypeSelect(event) {
+    setProductType(event.target.value);
   }
 
   return (
@@ -95,12 +95,12 @@ const AddProductPage = () => {
       <AppBar />
 
       <BottomAlert
-        message={alertMessage}
-        severity={alertSeverity}
-        open={addSuccess}
+        message='Product successfully updated !'
+        severity='success'
+        open={updateSuccess}
         duration={700}
         onClose={() => {
-          setAddSuccess(false);
+          setUpdateSuccess(false);
           navigate('/');
         }}
       />
@@ -109,18 +109,18 @@ const AddProductPage = () => {
         <Box sx={{ margin: 2 }}>
           <Box margin={4}>
             <Typography variant='h2' align='center'>
-              Add Product
+              Update Product
             </Typography>
           </Box>
 
           <Container maxWidth='sm'>
             <Stack spacing={2} bgcolor='#ff'>
               <TextField
-                disabled={fieldsDisabled}
                 id='outlined-basic'
                 label='Name*'
                 variant='outlined'
-                onChange={handleOnNameChange}
+                value={productName}
+                onChange={handleOnNameType}
                 error={nameError}
                 helperText={nameHelperMessage}
                 onFocus={() => {
@@ -129,13 +129,13 @@ const AddProductPage = () => {
                 }}
               />
               <TextField
-                disabled={fieldsDisabled}
                 id='outlined-basic'
                 label='Product Type*'
                 variant='outlined'
                 select
-                defaultValue={''}
-                onChange={handleOnTypeChange}
+                helperText='Please select a product type'
+                value={productType}
+                onChange={handleOnTypeSelect}
                 error={typeError}
                 helperText={typeHelperMessage}
                 onFocus={() => {
@@ -169,7 +169,7 @@ const AddProductPage = () => {
                   >
                     Cancel
                   </Button>
-                  <Button variant='contained' onClick={() => handleOnSave()}>
+                  <Button variant='contained' onClick={() => handleUpdate()}>
                     Save
                   </Button>
                 </Stack>
@@ -182,4 +182,4 @@ const AddProductPage = () => {
   );
 };
 
-export default AddProductPage;
+export default UpdateProductPage;
