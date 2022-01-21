@@ -41,7 +41,7 @@ or
 yarn install
 ```
 
-### Define backend's URI (Optional)
+#### Define backend's URI (Optional)
 By default, the backend's URI must be http://localhost:4000/api.
 But if you're on a different setup, please define the correct URI in services/productsService.js
 
