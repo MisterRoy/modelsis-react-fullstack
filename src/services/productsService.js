@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const apiUrl = 'http://192.168.1.4:4000/api';
+const apiUrl = 'http://localhost:4000/api';
 
 export async function getProductTypes() {
   const response = await axios.get(`${apiUrl}/productType`);

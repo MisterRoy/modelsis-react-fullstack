@@ -10,6 +10,9 @@
 It consists in building a basic fullstack web app.
 The current repository refers to the frontend side.</div>
 
+![demo-web-desktop](demo_desktop.gif)
+![demo-web-mobile](demo_mobile.gif)
+
 
 ## ⛏️Built With
 
@@ -24,20 +27,16 @@ The current repository refers to the frontend side.</div>
 
 ## 🚀Run
 
+#### Clone repository
+```git clone https://github.com/MisterRoy/modelsis-react-fullstack.git```
+
 #### Install dependencies
-```
-npm install
-```
-or
-```
-yarn install
-```
+```npm install``` or ```yarn install```
+
+### Define backend's URI (Optional)
+By default, the backend's URI must be http://localhost:4000/api.
+But if you're on a different setup, please define the correct URI in services/productsService.js
+
 #### Launch
-Ensure that port 3000 is free
-```
-npm start
-```
-or
-```
-yarn start
-```
+Ensure that port 3000 is free and run
+```npm start``` or ```yarn start```
